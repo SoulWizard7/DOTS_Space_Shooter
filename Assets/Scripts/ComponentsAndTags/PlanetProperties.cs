@@ -6,6 +6,7 @@ namespace ComponentsAndTags
     {
         public float SunOrbitSpeed;
         public float RadiusSQ;
+        public float Health;
     }
 
     public struct PlanetDebug : IComponentData

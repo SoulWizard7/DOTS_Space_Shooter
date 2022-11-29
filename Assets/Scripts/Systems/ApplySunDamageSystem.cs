@@ -4,7 +4,10 @@ using Unity.Entities;
 
 namespace Systems
 {
-    public partial struct InitializeAsteroidsSystem : ISystem
+    [BurstCompile]
+    [UpdateInGroup(typeof(SimulationSystemGroup), OrderLast = true)]
+    [UpdateAfter(typeof(EndSimulationEntityCommandBufferSystem))]
+    public partial struct ApplySunDamageSystem : ISystem
     {
         [BurstCompile]
         public void OnCreate(ref SystemState state)
@@ -21,7 +24,10 @@ namespace Systems
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            
+            foreach (var sun in SystemAPI.Query<SunAspect>())
+            {
+                sun.DamageSun();
+            }
         }
     }
 }

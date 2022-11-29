@@ -2,7 +2,6 @@
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
-using UnityEngine;
 
 namespace ComponentsAndTags
 {
@@ -17,6 +16,13 @@ namespace ComponentsAndTags
         private float MoveSpeed => _asteroidMoveSpeed.ValueRO.Value;
         private float Heading => _asteroidHeading.ValueRO.Value;
 
+        private readonly RefRW<PlanetList> _planetList;
+        
+        public NativeArray<Entity> PlanetList
+        {
+            get => _planetList.ValueRO.Value;
+            set => _planetList.ValueRW.Value = value;
+        }
         
 
         public void MoveForward(float deltaTime)
@@ -33,7 +39,20 @@ namespace ComponentsAndTags
 
         public bool IsHittingPlanet(float3 planetPosition, float planetRadius)
         {
+            
             return math.distancesq(planetPosition, _transformAspect.Position) <= planetRadius;
+        }
+
+        public int debugPlanetList()
+        {
+            return PlanetList.Length;
+            //return _planetList.ValueRO.Value.Length; no work
+        }
+
+        public void DamageSun(EntityCommandBuffer.ParallelWriter ecb, int sortKey, Entity sun)
+        {
+            var damage = new PlanetDamageBufferElement { Value = 1 };
+            ecb.AppendToBuffer(sortKey, sun, damage);
         }
     }
 }

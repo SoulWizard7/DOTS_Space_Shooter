@@ -15,6 +15,7 @@ namespace AuthoringAndMono
         {
             AddComponent(new AsteroidMoveSpeed {Value = authoring.AsteroidMoveSpeed});
             AddComponent(new AsteroidHeading());
+            AddComponent<PlanetList>();
         }
     }
 }

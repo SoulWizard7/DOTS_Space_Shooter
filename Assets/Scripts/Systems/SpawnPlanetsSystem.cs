@@ -52,7 +52,10 @@ namespace Systems
                 var newAsteroid = ecb.Instantiate(outerSpaceAspect.AsteroidPrefab);
                 var newAsteroidTransform = outerSpaceAspect.GetRandomAsteroidTransform();
                 ecb.SetComponent(newAsteroid, new LocalToWorldTransform{ Value = newAsteroidTransform });
+                ecb.SetComponent(newAsteroid, new PlanetList{Value = outerSpaceAspect.PlanetList});
             }
+            
+            
             
             ecb.Playback(state.EntityManager);
         }

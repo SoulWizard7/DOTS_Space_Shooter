@@ -1,6 +1,7 @@
 ﻿using ComponentsAndTags;
 using Unity.Burst;
 using Unity.Entities;
+using UnityEngine;
 
 namespace Systems
 {
@@ -24,9 +25,14 @@ namespace Systems
         public void OnUpdate(ref SystemState state)
         {
             var deltaTime = SystemAPI.Time.DeltaTime;
+            var ecbSingleton = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>();
+            var sunEntitiy = SystemAPI.GetSingletonEntity<SunTag>();
+            
             new AsteroidCollisionJob()
             {
-                DeltaTime = deltaTime
+                DeltaTime = deltaTime,
+                ECB = ecbSingleton.CreateCommandBuffer(state.WorldUnmanaged).AsParallelWriter(),
+                SunEntity = sunEntitiy
             }.ScheduleParallel();
         }
     }
@@ -34,14 +40,26 @@ namespace Systems
     public partial struct AsteroidCollisionJob : IJobEntity
     {
         public float DeltaTime;
+        public EntityCommandBuffer.ParallelWriter ECB;
+        public Entity SunEntity;
 
         [BurstCompile]
-        private void Execute(AsteroidMoveAspect asteroid)
+        private void Execute(AsteroidMoveAspect asteroid, [EntityInQueryIndex] int sortKey)
         {
             if (asteroid.IsHittingSun())
             {
-                
+                asteroid.DamageSun(ECB, sortKey, SunEntity);
             }
+/*
+            if (asteroid.debugPlanetList() > 10)
+            {
+                Debug.Log("List over 10");
+            }
+
+            if (asteroid.debugPlanetList() < 10)
+            {
+                Debug.Log("planetlist failed");
+            }*/
         }
     }
 }

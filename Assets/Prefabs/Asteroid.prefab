@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf9f3131cf854f97bc8a41bcfc62cdf5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AsteroidMoveSpeed: 2
+  AsteroidMoveSpeed: 20
 --- !u!1 &5546039298762327971
 GameObject:
   m_ObjectHideFlags: 0

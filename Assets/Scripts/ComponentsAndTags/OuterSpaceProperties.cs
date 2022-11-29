@@ -21,4 +21,10 @@ namespace ComponentsAndTags
     }
     
     public struct SunTag : IComponentData {}
+
+    public struct SunHealth : IComponentData
+    {
+        public int Health;
+        public int MaxHealth;
+    }
 }
